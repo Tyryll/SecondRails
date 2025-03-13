@@ -1,0 +1,47 @@
+<div class="container mt-4">
+  <% if notice %>
+    <div class="alert alert-success"><%= notice %></div>
+  <% end %>
+
+  <div class="card shadow-lg p-4">
+    <h1 class="text-primary"><%= @post.title %></h1>
+    <p class="text-muted">Posted by: <strong><%= @post.user.email if @post.user %></strong></p>
+    <hr>
+    <p class="lead"><%= @post.content %></p>
+  </div>
+
+  <% if user_signed_in? && @post.user == current_user %>
+    <div class="mt-4 d-flex justify-content-between">
+      <%= link_to "Edit Post", edit_post_path(@post), class: "btn btn-warning" %>
+      <%= link_to "Back to Posts", posts_path, class: "btn btn-secondary" %>
+
+      <!-- Delete Button that Triggers Modal -->
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        Delete
+      </button>
+    </div>
+  <% else %>
+    <div class="mt-4">
+      <%= link_to "Back to Posts", posts_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<!-- Bootstrap Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this post?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <%= button_to "Delete", @post, method: :delete, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+</div>
